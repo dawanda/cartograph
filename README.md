@@ -5,7 +5,7 @@ Minimal JavaScript routing microframework connecting paths to functions.
 
 ## Why?
 
-Web apps frequently need to initialize client-side JavaScript on a per-page basis. Initializing stuff with inline JavaScript works for small applications, but when they grow larger id does not scale: there is no single place responsible for setting up the state. `Cartograph` comes to the rescue, providing a simple and barebone routing logic matching URL paths to JavaScript functions, so you can run code depending on the current URL. It has a clean and readable DSL with support for named URL parameters and splats. All in a microscopic framework of less than 3Kb of code.
+Web apps frequently need to initialize client-side JavaScript on a per-page basis. Initializing stuff with inline JavaScript works for small applications, but when they grow larger it does not scale: there is no single place responsible for setting up the state. `Cartograph` comes to the rescue, providing a simple and barebone routing logic matching URL paths to JavaScript functions, so you can run code depending on the current URL. It has a clean and readable DSL with support for named URL parameters and splats. All in a microscopic framework of less than 3Kb of code.
 
 
 ## Example Usage
