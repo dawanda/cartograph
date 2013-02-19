@@ -12,7 +12,7 @@ responsible for setting up the state. `Cartograph` comes to the rescue,
 providing a simple and barebone routing logic matching URL paths to JavaScript
 functions, so you can run code depending on the current URL. It has a clean and
 readable DSL with support for named URL parameters and splats. All in a
-microscopic framework of less than 3Kb of code.
+microscopic framework of less than 2Kb of code.
 
 
 ## Example Usage
@@ -26,6 +26,7 @@ var Router = new Cartograph(function() {
 
   this.namespace("/users", function() {
 
+    // Say we have a controller object:
     var users = UsersController;
 
     this.map( "/", users.index );
