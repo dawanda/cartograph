@@ -20,10 +20,14 @@ microscopic framework of less than 2Kb of code.
 ```javascript
 var Router = new Cartograph(function() {
 
+  // Connect route to a function:
   this.map("/foo/:id", function( req ) {
+    // `req` is an object containing the params
+    // and other information on the request
     console.log( "Requested id is: " + req.params["id"] );
   });
 
+  // Namespaced routes:
   this.namespace("/users", function() {
 
     // Say we have a controller object:
@@ -39,8 +43,30 @@ var Router = new Cartograph(function() {
 
 });
 
-// Match current location (will execute the first matching route)
+// Unleash the magic! (will execute the first matching route)
 Router.matchLocation( window.location );
+```
+
+And with CoffeeScript it's even more fun:
+
+```coffeescript
+Router = new Cartograph ->
+
+  @map "/foo/:id", ( req ) ->
+    console.log "Requested id is #{req.params['id']}"
+
+  @namespace "/users", ->
+
+    users = UsersController
+
+    @map "/", users.index
+
+    @map "/:id", users.show
+
+    @map "/new", users.new
+
+# Unleash the magic!
+Router.matchLocation window.location
 ```
 
 
