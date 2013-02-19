@@ -12,7 +12,7 @@
   "scripts": {
     "test": "npm run compile && ./node_modules/.bin/buster-test -c spec/buster.js",
     "compile": "./node_modules/.bin/coffee -c ./lib/cartograph.coffee",
-    "minify": "./node_modules/.bin/uglifyjs ./lib/cartograph.js -o ./lib/cartograph.min.js",
+    "minify": "./node_modules/.bin/uglifyjs ./lib/cartograph.js --compress -o ./lib/cartograph.min.js",
     "build": "npm run compile && npm run minify"
   },
   "devDependencies": {
