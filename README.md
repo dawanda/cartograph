@@ -25,6 +25,6 @@ var Router = new Cartograph(function() {
 
 });
 
-# Match current location (will execute the first matching route)
+// Match current location (will execute the first matching route)
 Router.matchLocation( window.location );
 ```
