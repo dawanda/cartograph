@@ -35,6 +35,8 @@ class Cartograph
       params[ match[1] ] = match[2] while match = re.exec querystr
     params
 
+  prefix = ""
+
   # Public
 
   constructor: ( fn ) ->
@@ -52,7 +54,7 @@ class Cartograph
       return throw new Error("callback must be a function")
 
     @mappings.push
-      route:  route
+      route: prefix + route
       callback: fn
 
   match: ( path, mixin ) ->
@@ -92,11 +94,10 @@ class Cartograph
       params: params
 
   namespace: ( ns, fn ) ->
-    self = @
-    proxy =
-      map: ( route, cbk ) ->
-        self.map ns + route, cbk
-    fn.call proxy
+    tmp = prefix
+    prefix = prefix + ns
+    fn.call @
+    prefix = tmp
 
 # Export as:
 # CommonJS module

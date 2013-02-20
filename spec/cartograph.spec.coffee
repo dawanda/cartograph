@@ -163,9 +163,17 @@ describe "Cartograph", ->
 
   describe "namespace", ->
 
-    it "proxies calls to map() to Cartograph#map after namespacing them", ->
+    it "namespaces routes", ->
       cbk = ->
-      @stub @c, "map"
       @c.namespace "foo", ->
         @map "/bar", cbk
-      expect( @c.map ).toHaveBeenCalledOnceWith "foo/bar", cbk
+      expect( @c.mappings.pop() ).toMatch
+        route: "foo/bar"
+
+    it "can be nested multiple times", ->
+      cbk = ->
+      @c.namespace "/foo", ->
+        @namespace "/bar", ->
+          @map "/baz", cbk
+      expect( @c.mappings.pop() ).toMatch
+        route: "/foo/bar/baz"
