@@ -136,6 +136,12 @@ describe "Cartograph", ->
       match = @c.scan "foo/quux/quuux/baz/123/", "foo/*/baz/*"
       expect( match.params.splats ).toEqual ["quux/quuux", "123/"]
 
+    it "works properly when path contains characters with special meaning in regexps", ->
+      match = @c.scan "/123/foo-bar.json", "/:id/foo-*.*"
+      expect( match.params ).toMatch
+        splats: ["bar", "json"]
+        id: "123"
+
     describe "when a mapping is provided as the third argument", ->
 
       it "caches regexps and param names in the mapping", ->
@@ -151,10 +157,9 @@ describe "Cartograph", ->
           splat_regexp: /(bar)/
           param_names:  ["foo"]
         match = @c.scan "foo/bar/baz", "xxx", mapping
-        expect( match ).toMatch
-          params:
-            splats: ["bar"]
-            foo: "foo"
+        expect( match.params ).toMatch
+          splats: ["bar"]
+          foo: "foo"
 
   describe "namespace", ->
 

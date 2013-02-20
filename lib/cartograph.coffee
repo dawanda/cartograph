@@ -16,8 +16,10 @@ class Cartograph
     routeToRegexp route, param_replace, splat_replace
 
   routeToRegexp = ( route, param_replace, splat_replace ) ->
+    escape_regexp = /[\-{}\[\]+?.,\\\^$|#\s]/g
     route =
       route
+        .replace( escape_regexp, "\\$&" )
         .replace( param_regexp, param_replace )
         .replace( splat_regexp, splat_replace )
     new RegExp "^#{ route }$", "i"
