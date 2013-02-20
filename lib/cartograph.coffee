@@ -2,15 +2,13 @@ class Cartograph
 
   # Private
 
-  named_param_regexp  = /:([\w\d]+)/g
-  named_param_replace = "([^\/]+)"
-
-  splat_regexp  = /\*([\w\d]+)/g
-  splat_replace = "(.*)"
-
-  name_regexp = /[:|\*]([\w\d]+)/g
-
   routeToRegExp = ( route ) ->
+    named_param_regexp  = /:([\w\d]+)/g
+    named_param_replace = "([^\/]+)"
+
+    splat_regexp  = /\*([\w\d]+)/g
+    splat_replace = "(.*)"
+
     route =
       route
         .replace( named_param_regexp, named_param_replace )
@@ -18,6 +16,7 @@ class Cartograph
     new RegExp "^#{ route }$", "gi"
 
   extractParamNames = ( route ) ->
+    name_regexp = /[:|\*]([\w\d]+)/g
     names = name[1] while name = name_regexp.exec route
 
   parseQueryParams = ( querystr ) ->
