@@ -12,7 +12,7 @@ responsible for setting up the state. `Cartograph` comes to the rescue,
 providing a simple and barebone routing logic matching URL paths to JavaScript
 functions, so you can run code depending on the current URL. It has a clean and
 readable DSL with support for named URL parameters and splats. All in a
-microscopic framework of less than 2Kb of code.
+microscopic framework of ~2Kb of minified code.
 
 
 ## Example Usage
@@ -84,7 +84,7 @@ Adds a mapping for `route` to function `fn`. Whenever `match` or
 `matchLocation` is called and this route is the first one matching, `fn` is
 executed passing an object containing information on the request and the named
 params. `route` is a string path, and can contain named params (e.g.
-`"/foo/:id"`) and named splats (e.g. `"/foo/*splat/bar"`).
+`"/foo/:id"`) and named splats (e.g. `"/foo/*/bar"`).
 
 ### namespace( ns, fn )
 
