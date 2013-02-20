@@ -136,6 +136,19 @@ describe "Cartograph", ->
       match = @c.scan "foo/qux/quux/baz", "foo/*bar/baz"
       expect( match.params.bar ).toEqual "qux/quux"
 
+    describe "when a mapping is provided as the third argument", ->
+
+      it "caches the regexp in the mapping", ->
+        mapping = {}
+        @c.scan "foo/bar/baz", "foo/:bar/baz", mapping
+        expect( mapping.regexp ).toBeDefined()
+
+      it "uses the existing regexp in the mapping if available", ->
+        mapping =
+          regexp: /foo/
+        match = @c.scan "foo/bar/baz", "xxx", mapping
+        expect( match ).toBeObject()
+
   describe "namespace", ->
 
     it "proxies calls to map() to Cartograph#map after namespacing them", ->

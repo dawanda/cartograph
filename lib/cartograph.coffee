@@ -66,8 +66,12 @@ class Cartograph
     mixin[ key ] = val for key, val of loc
     @match loc.pathname, mixin
 
-  scan: ( msg, route ) ->
-    re   = routeToRegExp route
+  scan: ( msg, route, mapping ) ->
+    if mapping? and mapping.regexp?
+      re = mapping.regexp
+    else
+      re = routeToRegExp route
+      mapping.regexp = re if mapping?
     data = re.exec msg
     return false unless data?
     names = extractParamNames route
