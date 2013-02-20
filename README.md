@@ -81,10 +81,14 @@ the newly created instance, providing a closure for route definitions.
 ### map( route, fn )
 
 Adds a mapping for `route` to function `fn`. Whenever `match` or
-`matchLocation` is called and this route is the first one matching, `fn` is
-executed passing an object containing information on the request and the named
-params. `route` is a string path, and can contain named params (e.g.
-`"/foo/:id"`) and named splats (e.g. `"/foo/*/bar"`).
+`matchRequest` is called, mappings are checked in order until the first
+matching route is found. The callback function for that route is then executed,
+passing as the first argument a request object.
+
+Routes are strings, and can contain named params (e.g.  `"/foo/:id"`) and
+splats (e.g. `"/foo/*/bar"`). The request object passed to `fn` exposes a
+`params` object property containing params. Splats are accessible on the same
+object via the `params["splats"]` array.
 
 ### namespace( ns, fn )
 
@@ -93,23 +97,22 @@ calling `map` are prefixed with the namespace `ns`.
 
 ### match( path, [mixin] )
 
-Gets a `path` string and match it against each mapping in order until a match
+Gets a `path` string and match it against each route in order until a match
 is found. If a matching route is found, it executes its callback function
 passing an object containing information about the request and the params. If a
 `mixin` object is provided, its properties are mixed in the request object (so
 that additional request info or params can be inserted).
 
-### matchLocation( [location] )
+### matchRequest( [request] )
 
-Similar to `match`, but it is meant to take an object similar to
-`window.location` (exposing a `pathname` property) as argument
-instead of a path string. If no argument is provided,
-`window.location` is taken (this is the only case in which
-`Cartograph` makes a soft assumption of being in the browser). It
-also mixes into the request object the parsed query string params, as
-well as all properties of `location`, so that they become available
-to the callback. This method should usually be called upon page load
-and at every `pushState` call or `popstate` event.
+Similar to `match`, but it takes as argument a request object exposing at least
+a `pathname` property. If no argument is provided, `window.location` is taken
+(this is the only case in which `Cartograph` makes a soft assumption of being
+in the browser). When building the object to be passed to the matched callback,
+it also mixes in it all the request properties and all the params parsed from
+the querystring (looked for in `request.search`), so that they become available
+to the callback. When used in the browser, this method should be called upon
+page load and whenever the location changes.
 
 ### draw( fn )
 
