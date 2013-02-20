@@ -45,7 +45,7 @@ var Router = new Cartograph(function() {
 
 // Unleash the magic! (will get window.location
 // and execute the first matching route)
-Router.matchLocation();
+Router.matchRequest();
 ```
 
 And with CoffeeScript it's even more fun:
@@ -67,7 +67,7 @@ Router = new Cartograph ->
     @map "/new", users.new
 
 # Unleash the magic!
-Router.matchLocation()
+Router.matchRequest()
 ```
 
 

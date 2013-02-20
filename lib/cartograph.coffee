@@ -69,11 +69,11 @@ class Cartograph
         mapping.callback match
         break
 
-  matchLocation: ( loc = window.location ) ->
+  matchRequest: ( req = window.location ) ->
     mixin = {}
-    mixin.params = parseQueryParams loc.search if loc.search?
-    mixin[ key ] = val for key, val of loc
-    @match loc.pathname, mixin
+    mixin.params = parseQueryParams req.search if req.search?
+    mixin[ key ] = val for key, val of req
+    @match req.pathname, mixin
 
   scan: ( path, route, mapping = {} ) ->
     param_re = mapping.param_regexp || routeToParamRegExp route

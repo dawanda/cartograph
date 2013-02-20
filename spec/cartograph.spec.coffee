@@ -96,31 +96,31 @@ describe "Cartograph", ->
           bar: 123
           baz: 345
 
-  describe "matchLocation", ->
+  describe "matchRequest", ->
 
     before ->
-      @loc =
+      @req =
         pathname: "foo/bar"
 
     after ->
-      delete @loc
+      delete @req
 
     it "calls match() passing location.pathname and mixing in the location properties", ->
       @stub( @c, "match" )
-      @c.matchLocation @loc
-      expect( @c.match ).toHaveBeenCalledOnceWith( @loc.pathname, @loc )
+      @c.matchRequest @req
+      expect( @c.match ).toHaveBeenCalledOnceWith( @req.pathname, @req )
 
     it "parses query params and mixes them into params", ->
       @stub( @c, "match" )
-      @loc.search = "?foo=bar&baz=123&qux"
-      @c.matchLocation @loc
+      @req.search = "?foo=bar&baz=123&qux"
+      @c.matchRequest @req
       mixin =
         params:
           foo: "bar"
           baz: "123"
           qux: undefined
-      mixin[ k ] = v for k, v of @loc
-      expect( @c.match ).toHaveBeenCalledOnceWith( @loc.pathname, mixin )
+      mixin[ k ] = v for k, v of @req
+      expect( @c.match ).toHaveBeenCalledOnceWith( @req.pathname, mixin )
 
   describe "scan", ->
     
