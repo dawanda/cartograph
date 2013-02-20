@@ -84,7 +84,7 @@ Adds a mapping for `route` to function `fn`. Whenever `match` or
 `matchLocation` is called and this route is the first one matching, `fn` is
 executed passing an object containing information on the request and the named
 params. `route` is a string path, and can contain named params (e.g.
-"/foo/:id") and splats (e.g. "/foo/*splat/bar").
+`"/foo/:id"`) and named splats (e.g. `"/foo/*splat/bar"`).
 
 ### namespace( ns, fn )
 
