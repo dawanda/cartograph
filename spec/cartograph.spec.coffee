@@ -133,21 +133,28 @@ describe "Cartograph", ->
       expect( match.params.bar ).toEqual "qux"
 
     it "extracts splats", ->
-      match = @c.scan "foo/qux/quux/baz", "foo/*bar/baz"
-      expect( match.params.bar ).toEqual "qux/quux"
+      match = @c.scan "foo/quux/quuux/baz/123/", "foo/*bar/baz/*qux"
+      expect( match.params.splats ).toEqual ["quux/quuux", "123/"]
 
     describe "when a mapping is provided as the third argument", ->
 
-      it "caches the regexp in the mapping", ->
+      it "caches regexps and param names in the mapping", ->
         mapping = {}
         @c.scan "foo/bar/baz", "foo/:bar/baz", mapping
-        expect( mapping.regexp ).toBeDefined()
+        expect( mapping.param_regexp ).toBeDefined()
+        expect( mapping.splat_regexp ).toBeDefined()
+        expect( mapping.param_names ).toBeDefined()
 
-      it "uses the existing regexp in the mapping if available", ->
+      it "uses the existing regexps and param names in the mapping if available", ->
         mapping =
-          regexp: /foo/
+          param_regexp: /(foo)/
+          splat_regexp: /(bar)/
+          param_names:  ["foo"]
         match = @c.scan "foo/bar/baz", "xxx", mapping
-        expect( match ).toBeObject()
+        expect( match ).toMatch
+          params:
+            splats: ["bar"]
+            foo: "foo"
 
   describe "namespace", ->
 

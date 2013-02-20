@@ -2,18 +2,25 @@ class Cartograph
 
   # Private
 
-  routeToRegExp = ( route ) ->
-    named_param_regexp  = /:([\w\d]+)/g
-    named_param_replace = "([^\/]+)"
+  param_regexp  = /:([\w\d]+)/g
+  splat_regexp  = /\*([\w\d]+)/g
 
-    splat_regexp  = /\*([\w\d]+)/g
+  routeToParamRegExp = ( route ) ->
+    param_replace = "([^\/]+)"
+    splat_replace = ".*"
+    routeToRegexp route, param_replace, splat_replace
+
+  routeToSplatRegExp = ( route ) ->
+    param_replace = "[^\/]+"
     splat_replace = "(.*)"
+    routeToRegexp route, param_replace, splat_replace
 
+  routeToRegexp = ( route, param_replace, splat_replace ) ->
     route =
       route
-        .replace( named_param_regexp, named_param_replace )
+        .replace( param_regexp, param_replace )
         .replace( splat_regexp, splat_replace )
-    new RegExp "^#{ route }$", "gi"
+    new RegExp "^#{ route }$", "i"
 
   extractParamNames = ( route ) ->
     name_regexp = /[:|\*]([\w\d]+)/g
@@ -66,18 +73,19 @@ class Cartograph
     mixin[ key ] = val for key, val of loc
     @match loc.pathname, mixin
 
-  scan: ( msg, route, mapping ) ->
-    if mapping? and mapping.regexp?
-      re = mapping.regexp
-    else
-      re = routeToRegExp route
-      mapping.regexp = re if mapping?
-    data = re.exec msg
-    return false unless data?
-    names = extractParamNames route
+  scan: ( msg, route, mapping = {} ) ->
+    param_re = mapping.param_regexp || routeToParamRegExp route
+    mapping.param_regexp = param_re
+    return false unless param_re.test msg
+    splat_re = mapping.splat_regexp || routeToSplatRegExp route
+    mapping.splat_regexp = splat_re
+    param_data = param_re.exec msg
+    splat_data = splat_re.exec msg
+    param_names = mapping.param_names || extractParamNames route
+    mapping.param_names = param_names
     params = {}
-    data.shift()
-    params[ name ] = data[ i ] for name, i in names
+    params[ name ] = param_data[ i + 1 ] for name, i in param_names
+    params.splats = splat_data[1..]
     match =
       params: params
 
