@@ -119,3 +119,17 @@ page load and whenever the location changes.
 Like the constructor, it executes function `fn` in the scope of the
 `Cartograph` instance. It is useful for adding routes, especially if the route
 definition is splitted in multiple files.
+
+
+## Contributing
+
+Contributes are very welcome! If you have an idea about how to make
+`Cartograph` better, you should:
+
+  1. Fork the project and setup the environment with `npm install`
+
+  2. Write your new features/fixes and relative tests in CoffeeScript. The test
+     suite uses [BusterJS](http://busterjs.org), and can be run with `npm test`
+     after starting the Buster server.
+
+  3. Send a pull request (please do not change the version in `package.json`)
