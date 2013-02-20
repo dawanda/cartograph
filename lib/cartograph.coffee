@@ -61,9 +61,9 @@ class Cartograph
         mapping.callback match
         break
 
-  matchLocation: ( loc ) ->
+  matchLocation: ( loc = window.location ) ->
     mixin = {}
-    mixin.params = parseQueryParams loc.search if loc.search
+    mixin.params = parseQueryParams loc.search if loc.search?
     mixin[ key ] = val for key, val of loc
     @match loc.pathname, mixin
 
