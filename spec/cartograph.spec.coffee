@@ -133,7 +133,7 @@ describe "Cartograph", ->
       expect( match.params.bar ).toEqual "qux"
 
     it "extracts splats", ->
-      match = @c.scan "foo/quux/quuux/baz/123/", "foo/*bar/baz/*qux"
+      match = @c.scan "foo/quux/quuux/baz/123/", "foo/*/baz/*"
       expect( match.params.splats ).toEqual ["quux/quuux", "123/"]
 
     describe "when a mapping is provided as the third argument", ->

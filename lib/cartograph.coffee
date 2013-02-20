@@ -3,7 +3,7 @@ class Cartograph
   # Private
 
   param_regexp  = /:([\w\d]+)/g
-  splat_regexp  = /\*([\w\d]+)/g
+  splat_regexp  = /\*/g
 
   routeToParamRegExp = ( route ) ->
     param_replace = "([^\/]+)"
