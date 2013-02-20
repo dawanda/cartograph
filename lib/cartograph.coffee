@@ -55,9 +55,9 @@ class Cartograph
       route:  route
       callback: fn
 
-  match: ( msg, mixin ) ->
+  match: ( path, mixin ) ->
     for mapping in @mappings
-      if match = @scan msg, mapping.route
+      if match = @scan path, mapping.route
         if mixin?
           params = mixin.params
           delete mixin.params
@@ -75,14 +75,14 @@ class Cartograph
     mixin[ key ] = val for key, val of loc
     @match loc.pathname, mixin
 
-  scan: ( msg, route, mapping = {} ) ->
+  scan: ( path, route, mapping = {} ) ->
     param_re = mapping.param_regexp || routeToParamRegExp route
     mapping.param_regexp = param_re
-    return false unless param_re.test msg
+    return false unless param_re.test path
     splat_re = mapping.splat_regexp || routeToSplatRegExp route
     mapping.splat_regexp = splat_re
-    param_data = param_re.exec msg
-    splat_data = splat_re.exec msg
+    param_data = param_re.exec path
+    splat_data = splat_re.exec path
     param_names = mapping.param_names || extractParamNames route
     mapping.param_names = param_names
     params = {}
