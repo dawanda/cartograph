@@ -43,8 +43,9 @@ var Router = new Cartograph(function() {
 
 });
 
-// Unleash the magic! (will execute the first matching route)
-Router.matchLocation( window.location );
+// Unleash the magic! (will get window.location
+// and execute the first matching route)
+Router.matchLocation();
 ```
 
 And with CoffeeScript it's even more fun:
@@ -66,7 +67,7 @@ Router = new Cartograph ->
     @map "/new", users.new
 
 # Unleash the magic!
-Router.matchLocation window.location
+Router.matchLocation()
 ```
 
 
@@ -98,12 +99,16 @@ passing an object containing information about the request and the params. If a
 `mixin` object is provided, its properties are mixed in the request object (so
 that additional request info or params can be inserted).
 
-### matchLocation( location )
+### matchLocation( [location] )
 
-Similar to `match`, but it is meant to take `window.location` as argument
-instead of a path string. It also mixes in the request object the parsed query
-string params, as well as all `window.location` properties. This method should
-usually be called upon page load and at every `pushState` call or `popstate`
+Similar to `match`, but it is meant to take an object similar to
+`window.location` (exposing a `pathname` property) as argument
+instead of a path string. If no argument is provided,
+`window.location` is taken (this is the only case in which
+`Cartograph` makes a soft assumption of being in the browser. It also
+mixes in the request object the parsed query string params, as well
+as all `window.location` properties. This method should usually be
+called upon page load and at every `pushState` call or `popstate`
 event.
 
 ### draw( fn )
