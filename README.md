@@ -105,11 +105,11 @@ Similar to `match`, but it is meant to take an object similar to
 `window.location` (exposing a `pathname` property) as argument
 instead of a path string. If no argument is provided,
 `window.location` is taken (this is the only case in which
-`Cartograph` makes a soft assumption of being in the browser. It also
-mixes in the request object the parsed query string params, as well
-as all `window.location` properties. This method should usually be
-called upon page load and at every `pushState` call or `popstate`
-event.
+`Cartograph` makes a soft assumption of being in the browser). It
+also mixes into the request object the parsed query string params, as
+well as all properties of `location`, so that they become available
+to the callback. This method should usually be called upon page load
+and at every `pushState` call or `popstate` event.
 
 ### draw( fn )
 
