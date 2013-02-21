@@ -28,7 +28,7 @@ describe "Cartograph", ->
         route:    "foo/bar"
         callback: fn
 
-  describe "match", ->
+  describe "route", ->
 
     before ->
       @fn1 = @spy()
@@ -48,7 +48,7 @@ describe "Cartograph", ->
       ]
       @stub @c, "scan", ( msg, route ) ->
         route is "foo"
-      @c.match "foo"
+      @c.route "foo"
       refute.called( @fn1 )
       expect( @fn2 ).toHaveBeenCalledOnce()
       refute.called( @fn3 )
@@ -60,7 +60,7 @@ describe "Cartograph", ->
       @stub @c, "scan", ( msg, route ) ->
         return false unless route is "foo"
         match = 123
-      @c.match "foo"
+      @c.route "foo"
       expect( @fn1 ).toHaveBeenCalledWith( 123 )
 
     it "mixins the second argument's properties in the match objects", ->
@@ -71,7 +71,7 @@ describe "Cartograph", ->
         return false unless route is "foo"
         match =
           foo: "abc"
-      @c.match "foo",
+      @c.route "foo",
         bar: 123
         baz: 345
       expect( @fn1 ).toHaveBeenCalledWith
@@ -88,7 +88,7 @@ describe "Cartograph", ->
         match =
           params:
             bar: 123
-      @c.match "foo",
+      @c.route "foo",
         params:
           baz: 345
       expect( @fn1 ).toHaveBeenCalledWith
@@ -96,7 +96,7 @@ describe "Cartograph", ->
           bar: 123
           baz: 345
 
-  describe "matchRequest", ->
+  describe "routeRequest", ->
 
     before ->
       @req =
@@ -105,22 +105,22 @@ describe "Cartograph", ->
     after ->
       delete @req
 
-    it "calls match() passing location.pathname and mixing in the location properties", ->
-      @stub( @c, "match" )
-      @c.matchRequest @req
-      expect( @c.match ).toHaveBeenCalledOnceWith( @req.pathname, @req )
+    it "calls route() passing location.pathname and mixing in the location properties", ->
+      @stub( @c, "route" )
+      @c.routeRequest @req
+      expect( @c.route ).toHaveBeenCalledOnceWith( @req.pathname, @req )
 
     it "parses query params and mixes them into params", ->
-      @stub( @c, "match" )
+      @stub( @c, "route" )
       @req.search = "?foo=bar&baz=123&qux"
-      @c.matchRequest @req
+      @c.routeRequest @req
       mixin =
         params:
           foo: "bar"
           baz: "123"
           qux: undefined
       mixin[ k ] = v for k, v of @req
-      expect( @c.match ).toHaveBeenCalledOnceWith( @req.pathname, mixin )
+      expect( @c.route ).toHaveBeenCalledOnceWith( @req.pathname, mixin )
 
   describe "scan", ->
     

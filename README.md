@@ -45,7 +45,7 @@ var Router = new Cartograph(function() {
 
 // Unleash the magic! (will get window.location
 // and execute the first matching route)
-Router.matchRequest();
+Router.routeRequest();
 ```
 
 And with CoffeeScript it's even more fun:
@@ -67,7 +67,7 @@ Router = new Cartograph ->
     @map "/new", users.new
 
 # Unleash the magic!
-Router.matchRequest()
+Router.routeRequest()
 ```
 
 
@@ -80,8 +80,8 @@ the newly created instance, providing a closure for route definitions.
 
 ### map( route, fn )
 
-Adds a mapping for `route` to function `fn`. Whenever `match` or
-`matchRequest` is called, mappings are checked in order until the first
+Adds a mapping for `route` to function `fn`. Whenever `route` or
+`routeRequest` is called, mappings are checked in order until the first
 matching route is found. The callback function for that route is then executed,
 passing as the first argument a request object.
 
@@ -95,7 +95,7 @@ object via the `params["splats"]` array.
 Provides a namespace block. Whithin function `fn`, all routes defined by
 calling `map` are prefixed with the namespace `ns`.
 
-### match( path, [mixin] )
+### route( path, [mixin] )
 
 Gets a `path` string and match it against each route in order until a match
 is found. If a matching route is found, it executes its callback function
@@ -103,9 +103,9 @@ passing an object containing information about the request and the params. If a
 `mixin` object is provided, its properties are mixed in the request object (so
 that additional request info or params can be inserted).
 
-### matchRequest( [request] )
+### routeRequest( [request] )
 
-Similar to `match`, but it takes as argument a request object exposing at least
+Similar to `route`, but it takes as argument a request object exposing at least
 a `pathname` property. If no argument is provided, `window.location` is taken
 (this is the only case in which `Cartograph` makes a soft assumption of being
 in the browser). When building the object to be passed to the matched callback,

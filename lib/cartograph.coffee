@@ -61,7 +61,7 @@ class Cartograph
       route: prefixed_route
       callback: fn
 
-  match: ( path, mixin ) ->
+  route: ( path, mixin ) ->
     for mapping in @mappings
       if match = @scan path, mapping.route
         if mixin?
@@ -75,11 +75,11 @@ class Cartograph
         mapping.callback match
         break
 
-  matchRequest: ( req = window.location ) ->
+  routeRequest: ( req = window.location ) ->
     mixin = {}
     mixin.params = parseQueryParams req.search if req.search?
     mixin[ key ] = val for key, val of req
-    @match req.pathname, mixin
+    @route req.pathname, mixin
 
   scan: ( path, route, mapping = {} ) ->
     param_re = mapping.param_regexp || routeToParamRegExp route
