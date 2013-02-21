@@ -50,9 +50,9 @@ class Cartograph
     @mappings ?= []
 
     unless typeof route is "string"
-      return throw new Error("route must be a string")
+      throw new Error("route must be a string")
     unless typeof fn is "function"
-      return throw new Error("callback must be a function")
+      throw new Error("callback must be a function")
 
     @_prefixes ?= []
     prefixed_route = ( peek(@_prefixes) || "" ) + route
