@@ -54,8 +54,8 @@ class Cartograph
     unless typeof fn is "function"
       throw new Error("callback must be a function")
 
-    @_prefixes ?= []
-    prefixed_route = ( peek(@_prefixes) || "" ) + route
+    @_prefix_stack ?= []
+    prefixed_route = ( peek(@_prefix_stack) || "" ) + route
 
     @mappings.push
       route: prefixed_route
@@ -98,10 +98,10 @@ class Cartograph
       params: params
 
   namespace: ( ns, fn ) ->
-    @_prefixes ?= []
-    @_prefixes.push ( peek(@_prefixes) || "" ) + ns
+    @_prefix_stack ?= []
+    @_prefix_stack.push ( peek(@_prefix_stack) || "" ) + ns
     fn.call @
-    @_prefixes.pop
+    @_prefix_stack.pop()
 
 # Export as:
 # CommonJS module

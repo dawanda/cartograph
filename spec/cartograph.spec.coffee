@@ -165,15 +165,19 @@ describe "Cartograph", ->
 
     it "namespaces routes", ->
       cbk = ->
-      @c.namespace "foo", ->
+      @c.namespace "/foo", ->
         @map "/bar", cbk
-      expect( @c.mappings.pop() ).toMatch
-        route: "foo/bar"
+      expect( @c.mappings.pop().route ).toEqual "/foo/bar"
+
+    it "closes namespace afterward", ->
+      cbk = ->
+      @c.namespace "/foo", ->
+      @c.map "/baz", cbk
+      expect( @c.mappings.pop().route ).toEqual "/baz"
 
     it "can be nested multiple times", ->
       cbk = ->
       @c.namespace "/foo", ->
         @namespace "/bar", ->
           @map "/baz", cbk
-      expect( @c.mappings.pop() ).toMatch
-        route: "/foo/bar/baz"
+      expect( @c.mappings.pop().route ).toEqual "/foo/bar/baz"
