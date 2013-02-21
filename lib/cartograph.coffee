@@ -35,6 +35,9 @@ class Cartograph
       params[ match[1] ] = match[2] while match = re.exec querystr
     params
 
+  peek = ( array, idx = 1 ) ->
+    array[ array.length - idx ]
+
   # Public
 
   constructor: ( fn ) ->
@@ -51,10 +54,11 @@ class Cartograph
     unless typeof fn is "function"
       return throw new Error("callback must be a function")
 
-    @_prefix ?= ""
+    @_prefixes ?= []
+    prefixed_route = ( peek(@_prefixes) || "" ) + route
 
     @mappings.push
-      route: @_prefix + route
+      route: prefixed_route
       callback: fn
 
   match: ( path, mixin ) ->
@@ -94,10 +98,10 @@ class Cartograph
       params: params
 
   namespace: ( ns, fn ) ->
-    tmp = @_prefix || ""
-    @_prefix += ns
+    @_prefixes ?= []
+    @_prefixes.push ( peek(@_prefixes) || "" ) + ns
     fn.call @
-    @_prefix = tmp
+    @_prefixes.pop
 
 # Export as:
 # CommonJS module
