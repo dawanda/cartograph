@@ -3,19 +3,12 @@ class Cartograph
   # Private
 
   param_regexp  = /:([\w\d]+)/g
-  splat_regexp  = /\*/g
+  splat_regexp  = /\*\w+/g
+  
+  param_replace = "([^\/]+)"
+  splat_replace = "(.*)"
 
-  routeToParamRegExp = ( route ) ->
-    param_replace = "([^\/]+)"
-    splat_replace = ".*"
-    routeToRegexp route, param_replace, splat_replace
-
-  routeToSplatRegExp = ( route ) ->
-    param_replace = "[^\/]+"
-    splat_replace = "(.*)"
-    routeToRegexp route, param_replace, splat_replace
-
-  routeToRegexp = ( route, param_replace, splat_replace ) ->
+  routeToRegExp = ( route ) ->
     escape_regexp = /[\-{}\[\]+?.,\\\^$|#\s]/g
     route =
       route
@@ -55,7 +48,7 @@ class Cartograph
       throw new Error("callback must be a function")
 
     @_prefix_stack ?= []
-    prefixed_route = ( peek(@_prefix_stack) || "" ) + route
+    prefixed_route = ( peek( @_prefix_stack ) or "" ) + route
 
     @mappings.push
       route: prefixed_route
@@ -82,18 +75,12 @@ class Cartograph
     @route req.pathname, mixin
 
   scan: ( path, route, mapping = {} ) ->
-    param_re = mapping.param_regexp || routeToParamRegExp route
-    mapping.param_regexp = param_re
-    return false unless param_re.test path
-    splat_re = mapping.splat_regexp || routeToSplatRegExp route
-    mapping.splat_regexp = splat_re
-    param_data = param_re.exec path
-    splat_data = splat_re.exec path
-    param_names = mapping.param_names || extractParamNames route
-    mapping.param_names = param_names
+    mapping.regexp = mapping.regexp or routeToRegExp route
+    return false unless mapping.regexp.test path
+    data = mapping.regexp.exec path
+    mapping.param_names = mapping.param_names or extractParamNames route
     params = {}
-    params[ name ] = param_data[ i + 1 ] for name, i in param_names
-    params.splats = splat_data[1..]
+    params[ name ] = data[ i + 1 ] for name, i in mapping.param_names
     match =
       params: params
 

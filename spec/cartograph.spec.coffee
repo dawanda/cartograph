@@ -133,33 +133,33 @@ describe "Cartograph", ->
       expect( match.params.bar ).toEqual "qux"
 
     it "extracts splats", ->
-      match = @c.scan "foo/quux/quuux/baz/123/", "foo/*/baz/*"
-      expect( match.params.splats ).toEqual ["quux/quuux", "123/"]
+      match = @c.scan "foo/quux/quuux/baz/123/", "foo/*qux/baz/*abc"
+      expect( match.params.qux ).toEqual "quux/quuux"
+      expect( match.params.abc ).toEqual "123/"
 
     it "works properly when path contains characters with special meaning in regexps", ->
-      match = @c.scan "/123/foo-bar.json", "/:id/foo-*.*"
+      match = @c.scan "/123/foo-bar.json", "/:id/foo-*suffix.*ext"
       expect( match.params ).toMatch
-        splats: ["bar", "json"]
-        id: "123"
+        suffix: "bar"
+        ext:    "json"
+        id:     "123"
 
     describe "when a mapping is provided as the third argument", ->
 
       it "caches regexps and param names in the mapping", ->
         mapping = {}
-        @c.scan "foo/bar/baz", "foo/:bar/baz", mapping
-        expect( mapping.param_regexp ).toBeDefined()
-        expect( mapping.splat_regexp ).toBeDefined()
+        @c.scan "foo/bar/baz/qux", "foo/:bar/*baz", mapping
+        expect( mapping.regexp ).toBeDefined()
         expect( mapping.param_names ).toBeDefined()
 
       it "uses the existing regexps and param names in the mapping if available", ->
         mapping =
-          param_regexp: /(foo)/
-          splat_regexp: /(bar)/
-          param_names:  ["foo"]
+          regexp: /(foo)\/(bar\/baz)/
+          param_names:  ["foo", "bar"]
         match = @c.scan "foo/bar/baz", "xxx", mapping
         expect( match.params ).toMatch
-          splats: ["bar"]
           foo: "foo"
+          bar: "bar/baz"
 
   describe "namespace", ->
 
