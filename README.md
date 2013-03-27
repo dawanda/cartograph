@@ -107,11 +107,14 @@ a `mixin` object is provided, its properties are mixed in the request object
 Similar to `route`, but it takes as argument a request object exposing at
 least a `pathname` property. If no argument is provided, `window.location` is
 taken (this is the only case in which `Cartograph` makes a soft assumption of
-being in the browser). When building the object to be passed to the matched
-callback, it also mixes in it all the request properties and all the params
-parsed from the querystring (looked for in `request.search`), so that they
-become available to the callback. When used in the browser, this method
-should be called upon page load and whenever the location changes.
+being in the browser).
+
+When building the object to be passed to the matched callback, it also mixes in
+it all the request properties and all the params parsed from the querystring
+(looked for in `request.search`), so that they become available to the
+callback. Querystring params ending with `[]` are parsed into an array (e.g.
+`/mypath?foo[]=abc&foo[]=def&bar=ghi` will be parsed to params `foo = ["abc",
+"def"]` and `bar = "ghi"`).
 
 ### draw( fn )
 
