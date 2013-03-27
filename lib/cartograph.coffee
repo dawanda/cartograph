@@ -25,7 +25,13 @@ class Cartograph
     params = {}
     if querystr?
       re = /[\?&]([^=&]+)=?([^&$]+)?/g
-      params[ match[1] ] = match[2] while match = re.exec querystr
+      while match = re.exec querystr
+        if /\[\]$/.test match[1]
+          name = match[1].replace /\[\]$/, ""
+          params[ name ] ?= []
+          params[ name ].push match[2]
+        else
+          params[ match[1] ] = match[2]
     params
 
   peek = ( array, idx = 1 ) ->

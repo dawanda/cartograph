@@ -122,6 +122,16 @@ describe "Cartograph", ->
       mixin[ k ] = v for k, v of @req
       expect( @c.route ).toHaveBeenCalledOnceWith( @req.pathname, mixin )
 
+    it "correcty parses array query params", ->
+      @stub( @c, "route" )
+      @req.search = "?foo[]=bar&foo[]=baz&foo[]=qux"
+      @c.routeRequest @req
+      mixin =
+        params:
+          foo: ["bar", "baz", "qux"]
+      mixin[ k ] = v for k, v of @req
+      expect( @c.route ).toHaveBeenCalledOnceWith( @req.pathname, mixin )
+
   describe "scan", ->
     
     it "returns false if there is no match", ->
