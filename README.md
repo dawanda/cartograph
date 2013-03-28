@@ -113,8 +113,8 @@ When building the object to be passed to the matched callback, it also mixes in
 it all the request properties and all the params parsed from the querystring
 (looked for in `request.search`), so that they become available to the
 callback. Querystring params ending with `[]` are parsed into an array (e.g.
-`/mypath?foo[]=abc&foo[]=def&bar=ghi` will be parsed to params `foo = ["abc",
-"def"]` and `bar = "ghi"`).
+`/mypath?foo[]=abc&foo[]=def&bar=ghi` will be parsed to params `{ foo: ["abc",
+"def"], bar: "ghi" }`).
 
 ### draw( fn )
 
