@@ -26,6 +26,8 @@ class Cartograph
     if querystr?
       re = /[\?&]([^=&]+)=?([^&$]+)?/g
       while match = re.exec querystr
+        for k in [1..2]
+          match[ k ] = decodeURIComponent match[ k ] if match[ k ]?
         if /\[\]$/.test match[1]
           name = match[1].replace /\[\]$/, ""
           params[ name ] ?= []
@@ -86,7 +88,8 @@ class Cartograph
     data = mapping.regexp.exec path
     mapping.param_names = mapping.param_names or extractParamNames route
     params = {}
-    params[ name ] = data[ i + 1 ] for name, i in mapping.param_names
+    for name, i in mapping.param_names
+      params[ name ] = decodeURIComponent data[ i + 1 ]
     match =
       params: params
 

@@ -122,6 +122,16 @@ describe "Cartograph", ->
       mixin[ k ] = v for k, v of @req
       expect( @c.route ).toHaveBeenCalledOnceWith( @req.pathname, mixin )
 
+    it "decodes querystring params", ->
+      @stub( @c, "route" )
+      @req.search = "?foo%5B%5D=bar%26"
+      @c.routeRequest @req
+      mixin =
+        params:
+          "foo": ["bar&"]
+      mixin[ k ] = v for k, v of @req
+      expect( @c.route ).toHaveBeenCalledOnceWith( @req.pathname, mixin )
+
     it "correcty parses array query params", ->
       @stub( @c, "route" )
       @req.search = "?foo[]=bar&foo[]=baz&foo[]=qux"
@@ -142,7 +152,7 @@ describe "Cartograph", ->
       match = @c.scan "foo/qux/baz", "foo/:bar/baz"
       expect( match.params.bar ).toEqual "qux"
 
-    it "extracts splats", ->
+    it "extracts named splats", ->
       match = @c.scan "foo/quux/quuux/baz/123/", "foo/*qux/baz/*abc"
       expect( match.params.qux ).toEqual "quux/quuux"
       expect( match.params.abc ).toEqual "123/"
@@ -153,6 +163,11 @@ describe "Cartograph", ->
         suffix: "bar"
         ext:    "json"
         id:     "123"
+
+    it "decodes parameters and splats", ->
+      match = @c.scan "foo/%26%2F/baz/%2F%25/%7C", "foo/:bar/baz/*qux"
+      expect( match.params.bar ).toEqual "&/"
+      expect( match.params.qux ).toEqual "/%/|"
 
     describe "when a mapping is provided as the third argument", ->
 
