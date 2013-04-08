@@ -136,11 +136,11 @@ describe "Cartograph", ->
 
     it "decodes querystring params", ->
       @stub( @c, "route" )
-      @req.search = "?foo%5B%5D=bar%26+baz"
+      @req.search = "?foo%5B%5D=bar%26+baz+qux"
       @c.routeRequest @req
       mixin =
         params:
-          "foo": ["bar& baz"]
+          "foo": ["bar& baz qux"]
       mixin[ k ] = v for k, v of @req
       expect( @c.route ).toHaveBeenCalledOnceWith( @req.pathname, mixin )
 

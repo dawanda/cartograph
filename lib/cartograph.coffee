@@ -41,7 +41,7 @@ class Cartograph
 
   decode = ( v ) ->
     return v unless v?
-    decodeURIComponent v.replace( "+", "%20" )
+    decodeURIComponent v.replace( /\+/g, "%20" )
 
   # Public
 
