@@ -53,6 +53,18 @@ describe "Cartograph", ->
       expect( @fn2 ).toHaveBeenCalledOnce()
       refute.called( @fn3 )
 
+    it "returns what returned by the callback", ->
+      @c.mappings = [{ route: "foo", callback: -> 123 }]
+      @stub @c, "scan", ( msg, route ) ->
+        route is "foo"
+      expect( @c.route "foo" ).toEqual 123
+
+    it "returns null if there was no matching mapping", ->
+      @c.mappings = [{ route: "foo", callback: -> 123 }]
+      @stub @c, "scan", ( msg, route ) ->
+        false
+      expect( @c.route "foo" ).toBeNull()
+
     it "executes the callback passing the match object returned by scan()", ->
       @c.mappings = [
         { route: "foo", callback: @fn1 }
@@ -141,6 +153,11 @@ describe "Cartograph", ->
           foo: ["bar", "baz", "qux"]
       mixin[ k ] = v for k, v of @req
       expect( @c.route ).toHaveBeenCalledOnceWith( @req.pathname, mixin )
+
+    it "returns what returned by route", ->
+      @stub @c, "route", ->
+        123
+      expect( @c.routeRequest @req ).toEqual 123
 
   describe "scan", ->
     

@@ -77,8 +77,8 @@ class Cartograph
             match.params = params
           else
             match.params[ key ] = val for key, val of params
-        mapping.callback match
-        break
+        return mapping.callback match
+    return null
 
   routeRequest: ( req = window.location ) ->
     mixin = {}
