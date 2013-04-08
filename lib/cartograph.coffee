@@ -27,7 +27,7 @@ class Cartograph
       re = /[\?&]([^=&]+)=?([^&$]+)?/g
       while match = re.exec querystr
         for k in [1..2]
-          match[ k ] = decodeURIComponent match[ k ] if match[ k ]?
+          match[ k ] = decode match[ k ] if match[ k ]?
         if /\[\]$/.test match[1]
           name = match[1].replace /\[\]$/, ""
           params[ name ] ?= []
@@ -38,6 +38,10 @@ class Cartograph
 
   peek = ( array, idx = 1 ) ->
     array[ array.length - idx ]
+
+  decode = ( v ) ->
+    return v unless v?
+    decodeURIComponent v.replace( "+", "%20" )
 
   # Public
 
@@ -89,7 +93,7 @@ class Cartograph
     mapping.param_names = mapping.param_names or extractParamNames route
     params = {}
     for name, i in mapping.param_names
-      params[ name ] = decodeURIComponent data[ i + 1 ]
+      params[ name ] = decode data[ i + 1 ]
     match =
       params: params
 
