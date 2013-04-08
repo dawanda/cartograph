@@ -2,7 +2,7 @@
   "author": "Luca Ongaro <mail@lucaongaro.eu> (http://www.lucaongaro.eu)",
   "name": "cartograph",
   "description": "Minimal JavaScript router",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "./lib/cartograph.js",
   "keywords": [
     "mapper",
