@@ -154,6 +154,20 @@ describe "Cartograph", ->
       mixin[ k ] = v for k, v of @req
       expect( @c.route ).toHaveBeenCalledOnceWith( @req.pathname, mixin )
 
+    it "correcty parses nested query params", ->
+      @stub( @c, "route" )
+      @req.search = "?foo[bar]=123&foo[baz]=321&foo[qux][quux]=xxx"
+      @c.routeRequest @req
+      mixin =
+        params:
+          foo:
+            bar: "123",
+            baz: "321",
+            qux:
+              quux: "xxx"
+      mixin[ k ] = v for k, v of @req
+      expect( @c.route ).toHaveBeenCalledOnceWith( @req.pathname, mixin )
+
     it "returns what returned by route", ->
       @stub @c, "route", ->
         123

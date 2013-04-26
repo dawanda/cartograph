@@ -21,6 +21,20 @@ class Cartograph
     name_regexp = /[:|\*]([\w\d]+)/g
     names = name[1] while name = name_regexp.exec route
 
+  nestedObject = ( obj, nesting, value, overwrite ) ->
+    root_re = /^([^\[]+)(\[|$)/
+    re      = /\[([^\]]+)\]/g
+    root    = root_re.exec( nesting )?[1]
+    parts   = [ root ]
+    while part = re.exec nesting
+      parts.push part[1]
+    last_part = parts.pop()
+    for part in parts
+      obj[ part ] ?= {}
+      obj = obj[ part ]
+    obj[ last_part ] = value if overwrite or !obj[ last_part ]?
+    obj[ last_part ]
+
   parseQueryParams = ( querystr ) ->
     params = {}
     if querystr?
@@ -29,11 +43,11 @@ class Cartograph
         for k in [1..2]
           match[ k ] = decode match[ k ] if match[ k ]?
         if /\[\]$/.test match[1]
-          name = match[1].replace /\[\]$/, ""
-          params[ name ] ?= []
-          params[ name ].push match[2]
+          name  = match[1].replace /\[\]$/, ""
+          param = nestedObject( params, name, [], false )
+          param.push match[2]
         else
-          params[ match[1] ] = match[2]
+          nestedObject( params, match[1], match[2], true )
     params
 
   peek = ( array, idx = 1 ) ->
