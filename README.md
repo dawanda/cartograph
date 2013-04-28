@@ -73,23 +73,23 @@ Router.routeRequest()
 
 ## Methods
 
-### new Cartograph( [fn] )
+### new Cartograph( [fn()] )
 
-When called with a function `fn`, the constructor executes it in the scope of
+When called with a function `fn`, the constructor evaluates it in the scope of
 the newly created instance, providing a closure for route definitions.
 
-### map( route, fn )
+### map( route, fn() )
 
 Adds a mapping for `route` to function `fn`. Whenever `route` or
 `routeRequest` is called, mappings are checked in order until the first
 matching route is found. The callback function for that route is then
 executed, passing as the first argument a request object.
 
-Routes are strings, and can contain named params (e.g.  `"/foo/:id"`) and
+Routes are strings, and can contain named params (e.g. `"/foo/:id"`) and
 named splats (e.g. `"/foo/*bar/baz"`). The request object passed to `fn`
 exposes a `params` key/value object property containing params and splats.
 
-### namespace( ns, fn )
+### namespace( ns, fn() )
 
 Provides a namespace block. Whithin function `fn`, all routes defined by
 calling `map` are prefixed with the namespace `ns`.
@@ -109,18 +109,20 @@ least a `pathname` property. If no argument is provided, `window.location` is
 taken (this is the only case in which `Cartograph` makes a soft assumption of
 being in the browser).
 
-When building the object to be passed to the matched callback, it also mixes in
-it all the request properties and all the params parsed from the querystring
-(looked for in `request.search`), so that they become available to the
-callback. Querystring params ending with `[]` are parsed into an array (e.g.
-`/mypath?foo[]=abc&foo[]=def&bar=ghi` will be parsed to params `{ foo: ["abc",
-"def"], bar: "ghi" }`).
+When building the object to be passed to the matched callback, it also mixes
+in it all the request properties and all the params parsed from the
+querystring (looked for in `request.search`), so that they become available to
+the callback. Array params (e.g. `foo[]=a&foo[]=b`) and nested params (e.g.
+`foo[bar][baz]=qux`) are supported (so
+`/mypath?foo[]=xxx&foo[]=yyy&bar[baz]=zzz` will be parsed to params `{ foo:
+["xxx", "yyy"], bar: { baz: "zzz" } }`).
 
-### draw( fn )
+### draw( fn() )
 
 Like the constructor, it executes function `fn` in the scope of the
-`Cartograph` instance. It is useful for adding routes, especially if the
-route definition is splitted in multiple files.
+`Cartograph` instance. It is useful for adding routes on an existing
+`Cartograph` instance (e.g. if you want to split route definitions in multiple
+files).
 
 
 ## Contributing
