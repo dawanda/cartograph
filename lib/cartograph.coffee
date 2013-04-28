@@ -8,6 +8,7 @@ class Cartograph
   param_replace = "([^\/]+)"
   splat_replace = "(.*)"
 
+  # turn the given route string to the corresponding regular expression
   routeToRegExp = ( route ) ->
     escape_regexp = /[\-{}\[\]+?.,\\\^$|#\s]/g
     route =
@@ -17,16 +18,20 @@ class Cartograph
         .replace( splat_regexp, splat_replace )
     new RegExp "^#{ route }$", "i"
 
+  # extract all param names from the given route
   extractParamNames = ( route ) ->
     name_regexp = /[:|\*]([\w\d]+)/g
     names = name[1] while name = name_regexp.exec route
 
-  nestedObject = ( obj, nesting, value, overwrite ) ->
-    root_re = /^([^\[]+)(\[|$)/
-    re      = /\[([^\]]+)\]/g
-    root    = root_re.exec( nesting )?[1]
-    parts   = [ root ]
-    while part = re.exec nesting
+  # set a (possibly) nested param.
+  # E.g. `setNestedParam( params, "foo[bar][baz]", "xxx" )` would set
+  # `params.foo.bar.baz` to `"xxx"`.
+  setNestedParam = ( obj, nesting, value, overwrite = true ) ->
+    part_regexp = /\[([^\]]+)\]/g
+    root_regexp = /^([^\[]+)(\[|$)/
+    root        = root_regexp.exec( nesting )?[1]
+    parts       = [ root ]
+    while part = part_regexp.exec nesting
       parts.push part[1]
     last_part = parts.pop()
     for part in parts
@@ -35,6 +40,7 @@ class Cartograph
     obj[ last_part ] = value if overwrite or !obj[ last_part ]?
     obj[ last_part ]
 
+  # takes a query string and returns the params parsed as an object
   parseQueryParams = ( querystr ) ->
     params = {}
     if querystr?
@@ -44,15 +50,17 @@ class Cartograph
           match[ k ] = decode match[ k ] if match[ k ]?
         if /\[\]$/.test match[1]
           name  = match[1].replace /\[\]$/, ""
-          param = nestedObject( params, name, [], false )
+          param = setNestedParam( params, name, [], false )
           param.push match[2]
         else
-          nestedObject( params, match[1], match[2], true )
+          setNestedParam( params, match[1], match[2] )
     params
 
-  peek = ( array, idx = 1 ) ->
-    array[ array.length - idx ]
+  # return last element of an array
+  lastElemOf = ( array ) ->
+    array[ array.length - 1 ]
 
+  # proper URI component decoding, playing nice with '+'
   decode = ( v ) ->
     return v unless v?
     decodeURIComponent v.replace( /\+/g, "%20" )
@@ -74,7 +82,7 @@ class Cartograph
       throw new Error("callback must be a function")
 
     @_prefix_stack ?= []
-    prefixed_route = ( peek( @_prefix_stack ) or "" ) + route
+    prefixed_route = ( lastElemOf( @_prefix_stack ) or "" ) + route
 
     @mappings.push
       route: prefixed_route
@@ -113,7 +121,7 @@ class Cartograph
 
   namespace: ( ns, fn ) ->
     @_prefix_stack ?= []
-    @_prefix_stack.push ( peek(@_prefix_stack) || "" ) + ns
+    @_prefix_stack.push ( lastElemOf(@_prefix_stack) || "" ) + ns
     fn.call @
     @_prefix_stack.pop()
 
