@@ -91,7 +91,7 @@ class Cartograph
 
   route: ( path, mixin ) ->
     for mapping in @mappings
-      if match = @scan path, mapping.route
+      if match = @scan path, mapping.route, mapping
         if mixin?
           params = mixin.params
           delete mixin.params
