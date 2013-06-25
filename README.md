@@ -89,6 +89,9 @@ Routes are strings, and can contain named params (e.g. `"/foo/:id"`) and
 named splats (e.g. `"/foo/*bar/baz"`). The request object passed to `fn`
 exposes a `params` key/value object property containing params and splats.
 
+Trailing slash is considered optional, so `"/foo/bar"` and `"/foo/bar/"` are
+considered identical.
+
 ### namespace( ns, fn() )
 
 Provides a namespace block. Whithin function `fn`, all routes defined by
