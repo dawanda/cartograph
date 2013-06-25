@@ -200,6 +200,12 @@ describe "Cartograph", ->
       expect( match.params.bar ).toEqual "&/"
       expect( match.params.qux ).toEqual "/%/|"
 
+    it "considers the trailing slash optional", ->
+      match = @c.scan "foo/", "foo"
+      expect( match ).not.toBeFalse()
+      match = @c.scan "foo", "foo/"
+      expect( match ).not.toBeFalse()
+
     describe "when a mapping is provided as the third argument", ->
 
       it "caches regexps and param names in the mapping", ->

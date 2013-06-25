@@ -16,6 +16,7 @@ class Cartograph
         .replace( escape_regexp, "\\$&" )
         .replace( param_regexp, param_replace )
         .replace( splat_regexp, splat_replace )
+        .replace( /(\/|\b)$/, "\\/?" ) # optional trailing slash
     new RegExp "^#{ route }$", "i"
 
   # extract all param names from the given route
