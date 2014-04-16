@@ -35,9 +35,9 @@ var Router = new Cartograph(function() {
 
     this.map( "/", users.index );
 
-    this.map( "/:id", users.show );
-
     this.map( "/new", users.new );
+
+    this.map( "/:id", users.show );
 
   });
 
@@ -62,9 +62,9 @@ Router = new Cartograph ->
 
     @map "/", users.index
 
-    @map "/:id", users.show
-
     @map "/new", users.new
+
+    @map "/:id", users.show
 
 # Unleash the magic!
 Router.routeRequest()
