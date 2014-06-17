@@ -1,0 +1,23 @@
+{
+  "name": "cartograph",
+  "version": "0.1.6",
+  "homepage": "https://github.com/dawanda/cartograph",
+  "authors": [
+    "Luca Ongaro <mail@lucaongaro.eu> (http://www.lucaongaro.eu)"
+  ],
+  "description": "Minimal JavaScript router",
+  "main": "./lib/cartograph.js",
+  "keywords": [
+    "mapper",
+    "matcher",
+    "router"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
