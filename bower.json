@@ -12,6 +12,9 @@
     "matcher",
     "router"
   ],
+  "moduleType": [
+    "amd"
+  ],
   "license": "MIT",
   "ignore": [
     "**/.*",
